@@ -1,0 +1,76 @@
+<body>
+ <div class="container">
+  <canvas></canvas> 
+ </div> 
+ <script type="text/javascript">
+  var bodyStyle = document.body.style;
+  bodyStyle.mozUserSelect = 'none';
+  bodyStyle.webkitUserSelect = 'none';
+ /* 實例化一個圖片類 */
+ var img = new Image ();
+ /* 拿到canvas的DOM對象 */
+ var canvas = document.querySelector ('canvas'); 
+ /* canvas的背景為透明 */ 
+ canvas.style.backgroundColor = 'transparent';
+ /* canvas的定位方式為絕對定位* /
+ canvas.style.position = 'absolute';
+ /*中講捍衛中獎 */ 
+ var imgs = ['bg_01.jpg', 'bg_02.jpg'l;
+ /*隨機生成0或1 */
+ var num = Math.floor (Math.random () * 2);
+ /* 圖片的實例對象設置圖像* / 
+ img.src = imgs[num]
+ img.addEventListener ('load', function (e) {
+ var ctx;
+ var W = img.width,
+ h = img.height;
+ var offsetX = canvas.offsetLeft
+ offsetY = canvas.offsetTop
+ var mousedown = false;
+ function layer(ctx) { 
+ ctx.fillStyle  = 'gray';
+ ctx.fillRect (0, 0, w, h); 
+ }
+ function eventDown (e) { 
+ e.preventDefault();
+ mousedown = true;
+ }
+ function eventUp (e) { 
+ e.preventDefault();
+ mousedown = false;
+ }
+ function eventMove (e) {
+ e.preventDefault();
+ if (mousedown) {
+if (e.changedTouches) {
+ e = e.changedTouches [e.changedTouches.Length - 1];
+ var x = (e.clientX + document.body.scrollleft || e.pageX) - offsetX || 0,
+ y = (e.clientY + document.body.scrollTop || e.pageY) - offsetY || 0; 
+ctx.beginPath ();
+ ctx.arc(x, y, 20, 0, Math.PI * 2); 
+ctx.fill();
+  } 
+ } 
+ /* 設置寬度 */ 
+ canvas.width = w;
+ /* 設置高度 */
+ canvas.height = h; 
+ /* 設置背景 */
+ canvas.style.backgroundImage = 'url(' + img.src + ')'; 
+ /* 返回canvas 的上下文 */ 
+ ctx = canvas.getContext('2d'); 
+ /* 填充背景為透明 */ 
+ ctx.fillStyle = 'transparent';
+ /* 填充的位置和長寬 */
+ ctx.fillRect(0, 0, w, h);
+ /* 繪製蒙層 */
+ layer(ctx);
+ /* 路徑與原圖像重疊部分透明 */
+ ctx.globalComposite0peration = 'destination-out';
+ canvas.addEventListener('touchstart', eventDown);
+ canvas.addEventlistener ('touchend', eventUp);
+ canvas.addEventListener ('touchmove', eventMove);
+ canvas.addEventListener ('mousedown', eventDown);
+ canvas.addEventListener ('mouseup', eventUp);
+ canvas. addEventListener ('mousemove', eventMove);
+ });
